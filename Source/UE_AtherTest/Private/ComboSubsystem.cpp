@@ -4,33 +4,37 @@
 
 TMap<FString, UComboNode *> UComboSubsystem::RootNodes;
 
-void UComboSubsystem::BuildTree(FString RootName, TMap<FString, FComboNodeInfo> ComboNodeInfo)
+UComboSubsystem::UComboSubsystem() {
+    RootNodes.Reset();
+}
+
+void UComboSubsystem::BuildTree(FString RootName, const TMap<FString, FComboNodeInfo> &ComboNodeInfo)
 {
-    TMap<FString, UComboNode *> InputMap;
+    TMap<FString, UComboNode *> Nodes;
     TMultiMap<FString, FString> PrecedingIds;
-    InputMap[""] = new UComboNode(FString());
+    Nodes.Add(TEXT(""), (new UComboNode())->SetAction(TEXT("")));
 
     for (auto KeyVal : ComboNodeInfo)
     {
         // Block empty ids to avoid overlapping with root
         if (KeyVal.Key == "")
             continue;
-        InputMap[KeyVal.Key] = new UComboNode(KeyVal.Key);
+        Nodes.Add(KeyVal.Key, (new UComboNode())->SetAction(KeyVal.Key));
         PrecedingIds.Add(KeyVal.Value.PrecedingId, KeyVal.Key);
     }
-
+    
     for (auto KeyVal : PrecedingIds)
     {
-        UComboNode *PNode = InputMap[KeyVal.Key];
-        UComboNode *CNode = InputMap[KeyVal.Value];
-        EComboInput Input = ComboNodeInfo[KeyVal.Value].ComboInput;
+        UComboNode *PNode = Nodes[KeyVal.Key];
+        UComboNode *CNode = Nodes[KeyVal.Value];
+        EComboInput Input = ComboNodeInfo[KeyVal.Value].EnterInput;
         PNode->AddNavigation(Input, CNode);
     }
 
-    RootNodes.Add(RootName, InputMap[""]);
+    RootNodes.Add(RootName, Nodes[TEXT("")]);
 }
 
-void UComboSubsystem::LoadCombo(FString RootName, TMap<FString, FComboNodeInfo> ComboNodeInfo)
+void UComboSubsystem::LoadCombo(FString RootName, const TMap<FString, FComboNodeInfo> &ComboNodeInfo)
 {
     if (RootNodes.Contains(RootName))
         return;

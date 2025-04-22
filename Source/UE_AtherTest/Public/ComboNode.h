@@ -9,12 +9,11 @@
 /**
  *
  */
-class UE_ATHERTEST_API UComboNode
+class UComboNode 
 {
+
 public:
 	UComboNode();
-	UComboNode(FString s);
-	~UComboNode();
 
 private:
 	FString ActionName;
@@ -24,4 +23,5 @@ public:
 	void AddNavigation(EComboInput Input, UComboNode *NextNode);
 	UComboNode *Navigate(EComboInput Input);
 	FString GetActionName();
+	UComboNode *SetAction(FString Name);
 };

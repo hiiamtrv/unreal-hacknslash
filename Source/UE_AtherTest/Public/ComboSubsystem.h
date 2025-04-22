@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Subsystems/WorldSubsystem.h" 
+#include "Subsystems/WorldSubsystem.h"
 #include "Containers/Map.h"
-#include "ComboNodeInfo.h"
+#include "ComboNodeInfoDataAsset.h"
 #include "ComboNode.h"
 #include "ComboSubsystem.generated.h"
 
@@ -17,11 +17,14 @@ class UE_ATHERTEST_API UComboSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
+public:
+	UComboSubsystem();
+
 private:
 	static TMap<FString, UComboNode *> RootNodes;
-	void BuildTree(FString RootName, TMap<FString, FComboNodeInfo> ComboNodeInfo);
+	void BuildTree(FString RootName, const TMap<FString, FComboNodeInfo> &ComboNodeInfo);
 
 public:
-	void LoadCombo(FString RootName, TMap<FString, FComboNodeInfo> ComboNodeInfo);
+	void LoadCombo(FString RootName, const TMap<FString, FComboNodeInfo> &ComboNodeInfo);
 	static UComboNode *GetRootNode(FString RootName);
 };

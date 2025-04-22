@@ -5,29 +5,32 @@
 UComboNode::UComboNode()
 {
     InputMap.Reset();
-}
-
-UComboNode::UComboNode(FString s) {
-    ActionName = s;
-}
-
-UComboNode::~UComboNode()
-{
+    ActionName = TEXT("NA");
 }
 
 void UComboNode::AddNavigation(const EComboInput Input, UComboNode *NextNode)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Add navigation: %s -> %s"), *GetActionName(), *(NextNode->GetActionName()));
     InputMap.Add(Input, NextNode);
 }
 
-UComboNode *UComboNode::Navigate(const EComboInput Input)
+UComboNode* UComboNode::Navigate(const EComboInput Input)
 {
-    if (InputMap.Contains(Input))
-        return InputMap[Input];
+    if (UComboNode** NextNode = InputMap.Find(Input)){
+        UComboNode* Result = *NextNode;
+		return Result;
+	}
+
     return nullptr;
 }
 
 FString UComboNode::GetActionName()
 {
     return ActionName;
+}
+
+UComboNode* UComboNode::SetAction(FString Name)
+{
+    this->ActionName = Name;
+    return this;
 }

@@ -58,6 +58,14 @@ void AUE_AtherTestCharacter::BeginPlay()
 {
 	// Call the base class
 	Super::BeginPlay();
+
+	ComboRunner = GetComponentByClass<UComboRunner>();
+	AnimInstance = GetMesh()->GetAnimInstance();
+}
+
+bool AUE_AtherTestCharacter::CanMove()
+{
+	return AnimInstance->IsAnyMontagePlaying();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -102,7 +110,7 @@ void AUE_AtherTestCharacter::Move(const FInputActionValue &Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && !CanMove())
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -135,8 +143,10 @@ void AUE_AtherTestCharacter::Look(const FInputActionValue &Value)
 
 void AUE_AtherTestCharacter::DoPrimaryAction(const FInputActionValue &Value)
 {
+	ComboRunner->SendInput(EComboInput::LAttack);
 }
 
 void AUE_AtherTestCharacter::DoSecondaryAction(const FInputActionValue &Value)
 {
+	ComboRunner->SendInput(EComboInput::HAttack);
 }

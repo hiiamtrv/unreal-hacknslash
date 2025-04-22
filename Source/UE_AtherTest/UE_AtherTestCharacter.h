@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "ComboRunner.h"
 #include "UE_AtherTestCharacter.generated.h"
 
 class USpringArmComponent;
@@ -53,6 +54,10 @@ class AUE_AtherTestCharacter : public ACharacter
 public:
 	AUE_AtherTestCharacter();
 
+private:
+	UComboRunner* ComboRunner;
+	UAnimInstance* AnimInstance;
+
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue &Value);
@@ -75,4 +80,7 @@ public:
 	FORCEINLINE class USpringArmComponent *GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent *GetFollowCamera() const { return FollowCamera; }
+
+	UFUNCTION(BlueprintCallable, Category = "Action Handle")
+	bool CanMove();
 };
