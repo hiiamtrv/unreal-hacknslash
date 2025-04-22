@@ -97,7 +97,7 @@ void AUE_AtherTestCharacter::SetupPlayerInputComponent(UInputComponent *PlayerIn
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUE_AtherTestCharacter::Look);
 
 		EnhancedInputComponent->BindAction(PrimaryAction, ETriggerEvent::Started, this, &AUE_AtherTestCharacter::DoPrimaryAction);
-		EnhancedInputComponent->BindAction(SecondaryAction, ETriggerEvent::Started, this, &AUE_AtherTestCharacter::DoSecondaryAction);
+		EnhancedInputComponent->BindAction(SecondaryAction, ETriggerEvent::Triggered, this, &AUE_AtherTestCharacter::DoSecondaryAction);
 	}
 	else
 	{
@@ -148,5 +148,5 @@ void AUE_AtherTestCharacter::DoPrimaryAction(const FInputActionValue &Value)
 
 void AUE_AtherTestCharacter::DoSecondaryAction(const FInputActionValue &Value)
 {
-	ComboRunner->SendInput(EComboInput::HAttack);
+	ComboRunner->SendInput(EComboInput::Shield);
 }
